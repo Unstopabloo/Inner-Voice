@@ -1,0 +1,38 @@
+.grid-container {
+  display: grid;
+  grid-template-areas: 
+  "user main main main right"
+  "user main main main right"
+  "aside main main main right"
+  "aside main main main right"
+  "aside main main main right"
+  "aside player player player right"
+  ;
+  grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
+  gap: 1rem;
+  height: 100%;
+}
+
+.grid-container > * {
+  border-radius: 12px;
+} 
+
+.user-info {
+  grid-area: user;
+}
+
+.assistant {
+  grid-area: aside;
+}
+
+.main-content {
+  grid-area: main;
+}
+
+.cositas {
+  grid-area: right;
+}
+
+.player {
+  grid-area: player;
+}
