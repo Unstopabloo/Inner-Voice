@@ -5,16 +5,14 @@ import MainContent from './layout/MainContent.jsx'
 import Player from './layout/Player.jsx'
 
 function App() {
-  
   return (
-    <div className="grid-container">
+    <div className="dark grid-container">
       <Header />
       <Assistant />
       <MainContent />
-      <section className='cositas bg-amber-300'>cositas</section>
+      <section className="cositas bg-container">cositas</section>
       <Player />
     </div>
-
   )
 }
 
