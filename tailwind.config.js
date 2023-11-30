@@ -10,8 +10,10 @@ export default {
     colors: {
       primary: '#0070F0',
       back: '#000',
-      container: 'hsl(240, 2%, 8%, 60%)',
+      container: 'hsl(240, 2%, 8%, 70%)',
       gray: '#1E1E1E',
+      grayLight: '#3F3F46',
+      transparent: 'transparent',
       fore: '#A1A1AA'
     }
   },
