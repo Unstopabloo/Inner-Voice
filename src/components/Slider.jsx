@@ -16,19 +16,19 @@ export default function Slider() {
       className="rounded-lg overflow-hidden"
     >
       <SplideSlide
-        cover={true}
+        cover="true"
         className="rounded-lg overflow-hidden flex items-center justify-center"
       >
         <img src="/playaPrueba.jpg" alt="Image 1" />
       </SplideSlide>
       <SplideSlide
-        cover={true}
+        cover="true"
         className="rounded-lg overflow-hidden flex items-center justify-center"
       >
         <img src="/playaPrueba.jpg" alt="Image 1" />
       </SplideSlide>
       <SplideSlide
-        cover={true}
+        cover="true"
         src="/playaPrueba.jpg"
         className="rounded-lg overflow-hidden  flex items-center justify-center"
       >

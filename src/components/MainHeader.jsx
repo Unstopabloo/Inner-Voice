@@ -9,8 +9,8 @@ export default function MainHeader() {
       </h1>
       <Tabs key="default" color="default" radius="full" aria-label="Tabs">
         <Tab key="Mindfulness" title="Mindfulness" label="Tab 1" />
-        <Tab key="Ambiente" title="Ambiente" label="Tab 2" />
-        <Tab key="Guiada" title="Guiada" label="Tab 3" />
+        <Tab key="Guiada" title="Comunidad" label="Tab 2" />
+        <Tab key="Ambiente" title="Recursos" label="Tab 3" />
       </Tabs>
     </header>
   )
