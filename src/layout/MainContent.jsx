@@ -1,20 +1,18 @@
+import { Routes, Route } from 'react-router-dom'
 import MainHeader from '../components/MainHeader'
-import Slider from '../components/Slider'
-import BinauralSounds from '../components/BinauralSounds'
+import BlogPage from '../pages/BlogPage'
+import AudioPage from '../pages/AudioPage'
+import CommunityPage from '../pages/CommunityPage'
 
 export default function MainContent() {
   return (
     <main className="main-content bg-container">
       <MainHeader />
-      <div className="main-content-elements">
-        <Slider />
-        <BinauralSounds />
-        <h1>titulo</h1>
-        <h1>titulo</h1>
-        <h1>titulo</h1>
-        <h1>titulo</h1>
-        <h1>titulo</h1>
-      </div>
+      <Routes>
+        <Route path="/" element={<AudioPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/comunidad" element={<CommunityPage />} />
+      </Routes>
     </main>
   )
 }

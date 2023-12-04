@@ -1,8 +1,8 @@
-import { PlayerControls } from '../components/PlayerControls'
+import PlayerControls from '../components/PlayerControls'
 
 export default function Player() {
   return (
-    <footer>
+    <footer className="player bg-container flex flex-row items-center justify-between">
       <div className="actual-playing"></div>
       <PlayerControls />
       <div className="player-volume"></div>

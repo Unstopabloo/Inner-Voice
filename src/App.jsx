@@ -1,3 +1,4 @@
+import { BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
 import Header from './layout/Header.jsx'
 import Assistant from './layout/Assistant.jsx'
@@ -17,7 +18,9 @@ export default function App() {
         />
         <Header />
         <Assistant />
-        <MainContent />
+        <Router>
+          <MainContent />
+        </Router>
         <section className="cositas bg-container">cositas</section>
         <Player />
       </div>

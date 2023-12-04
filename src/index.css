@@ -12,14 +12,18 @@
 
 ::-webkit-scrollbar-track {
   background: #3f3f46;
-  border-radius: 13px; /* Cambia esto al color de fondo que quieras */
+  border-radius: 13px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #1e1e1e;
-  border-radius: 13px; /* Cambia esto al color que quieras */
+  border-radius: 13px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #0070f0;
+}
+
+div[data-focus='false'] {
+  display: none;
 }
