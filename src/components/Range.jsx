@@ -3,7 +3,7 @@ import PropType from 'prop-types'
 
 export default function Range({ range }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1 items-center">
       <Peace />
       <strong className="text-fore font-semibold">{range}</strong>
     </div>
