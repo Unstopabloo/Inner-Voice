@@ -1,10 +1,10 @@
-import Slider from '../components/Slider'
 import BinauralSounds from '../components/BinauralSounds'
+import Asmr from '../components/Asmr'
 
 export default function AudioPage() {
   return (
     <section className="main-content-elements">
-      <Slider />
+      <Asmr />
       <BinauralSounds />
     </section>
   )

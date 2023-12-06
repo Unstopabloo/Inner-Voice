@@ -1,15 +1,26 @@
 import { Play, Pause } from './Icons'
 import { Button } from '@nextui-org/react'
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { usePlayerStore } from '../store/playerStore'
 
 export default function PlayerControls() {
-  const [isPlaying, setIsPlaying] = useState(false)
+  const { isPlaying, setIsPlaying, currentSoundAudio } = usePlayerStore(
+    state => state
+  )
   // const [currentSong, setCurrentSong] = useState(null)
   const audioRef = useRef()
 
   useEffect(() => {
-    audioRef.current.src = '/the-last-piano.mp3'
-  }, [])
+    isPlaying ? audioRef.current.play() : audioRef.current.pause()
+  }, [isPlaying])
+
+  useEffect(() => {
+    if (currentSoundAudio) {
+      const audioSrc = currentSoundAudio
+      audioRef.current.src = audioSrc
+      audioRef.current.play()
+    }
+  }, [currentSoundAudio])
 
   const handleClick = () => {
     if (isPlaying) {
@@ -23,7 +34,7 @@ export default function PlayerControls() {
   }
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center gap-3 w-full flex-grow">
       <Button
         isIconOnly
         radius="full"
