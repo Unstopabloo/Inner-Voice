@@ -6,10 +6,7 @@ import UserTemplate from '/user-template.avif'
 
 export default function Header() {
   const { signInWithGoogle, signout, user } = UserAuth()
-
-  const formatName = user?.name.split(' ')
-  const userName = formatName?.[0]
-
+  const firstName = user && user.name ? user.name.split(' ')[0] : 'Bienvenido!'
   return (
     <section className="header bg-container p-4">
       <header className="flex flex-col items-center justify-center h-full gap-6">
@@ -19,9 +16,7 @@ export default function Header() {
           className="w-28 h-28"
         />
         <div className="max-w-[60%] flex flex-col gap-3 items-center">
-          <h2 className="font-bold text-[20px] text-center">
-            {user ? userName : 'Bienvenido!'}
-          </h2>
+          <h2 className="font-bold text-[20px] text-center">{firstName}</h2>
           <div className="flex gap-8">
             <Button
               isIconOnly
