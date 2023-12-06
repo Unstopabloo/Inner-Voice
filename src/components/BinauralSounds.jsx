@@ -1,11 +1,12 @@
-import CardSongs from '../components/Cards'
+import CardButton from './CardButton'
+import { Card, CardFooter } from '@nextui-org/react'
 import { UserAuth } from '../context/AuthContext'
 import { useEffect } from 'react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css/skyblue'
 
 function BinauralSounds() {
   const { sounds, getSounds } = UserAuth()
-
   useEffect(() => {
     getSounds()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,10 +26,25 @@ function BinauralSounds() {
         {sounds.map(sound => {
           return (
             <SplideSlide key={sound.id}>
-              <CardSongs
-                soundImg={sound.sound_poster}
-                soundName={sound.sound_name}
-              />
+              <Card
+                isFooterBlurred
+                radius="lg"
+                className="border-none w-full aspect-square"
+              >
+                <img src={sound.sound_poster} className="object-cover h-full" />
+                <CardFooter className="before:bg-white/10 border-white/20 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                  <strong className="text-[13px] flex-grow">
+                    {sound.sound_name}
+                  </strong>
+                  <CardButton
+                    id={sound.id}
+                    audio={sound.sound_audio}
+                    title={sound.sound_name}
+                    image={sound.sound_poster}
+                    description={sound.sound_description}
+                  />
+                </CardFooter>
+              </Card>
             </SplideSlide>
           )
         })}

@@ -3,6 +3,7 @@ import MainHeader from '../components/MainHeader'
 import BlogPage from '../pages/BlogPage'
 import AudioPage from '../pages/AudioPage'
 import CommunityPage from '../pages/CommunityPage'
+import AsmrPage from '../pages/AsmrPage'
 
 export default function MainContent() {
   return (
@@ -10,6 +11,7 @@ export default function MainContent() {
       <MainHeader />
       <Routes>
         <Route path="/" element={<AudioPage />} />
+        <Route path="/asmr" element={<AsmrPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/comunidad" element={<CommunityPage />} />
       </Routes>
