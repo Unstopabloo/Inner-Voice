@@ -9,7 +9,11 @@ export default function CurrentSong() {
       <picture className="w-16 h-16 rounded-md shadow-lg overflow-hidden block">
         <img
           className="object-cover w-full h-full"
-          src={currentSoundInfo.image}
+          src={
+            currentSoundInfo.image
+              ? currentSoundInfo.image
+              : '/user-template.avif'
+          }
           alt={currentSoundInfo.title}
         />
       </picture>
@@ -26,7 +30,7 @@ export default function CurrentSong() {
 }
 
 CurrentSong.propTypes = {
-  image: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired
+  image: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string
 }
