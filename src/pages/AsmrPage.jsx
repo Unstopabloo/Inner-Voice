@@ -1,69 +1,78 @@
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell
-} from '@nextui-org/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Play, Pause } from '../components/Icons'
+import { usePlayerStore } from '../store/playerStore'
+import ModalAsmr from '../components/ModalAsmr.jsx'
+import { Button, useDisclosure } from '@nextui-org/react'
 
 export default function AsmrPage() {
+  const [asmrPlaylist, setAsmrPlaylist] = useState([])
+  const [currentItem, setCurrentItem] = useState(null)
+  const { isPlaying } = usePlayerStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const API_URL =
-    'https://pabloyarce.laboratoriodiseno.cl/blog/wp-json/wp/v2/posts?_embed'
-
-  const items = []
+    'https://pabloyarce.laboratoriodiseno.cl/blog/wp-json/wp/v2/posts?_embed&per_page=15&order=asc'
 
   useEffect(() => {
     fetch(API_URL)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
-
-        data.forEach(item => {
-          const post = {
-            title: item.title.rendered,
-            excerpt: item.excerpt.rendered,
-            image:
-              item._embedded && item._embedded['wp:featuredmedia']
-                ? item._embedded['wp:featuredmedia'][0].source_url
-                : null,
-            queHice: item.acf.contenido_que_hice,
-            queAprendi: item.acf.contenido_que_aprendi
-          }
-
-          items.push(post)
-        })
-
-        console.log(items)
+        setAsmrPlaylist(data)
+        console.log(asmrPlaylist)
       })
   }, [])
 
+  const handleOpen = item => {
+    setCurrentItem(item)
+    onOpen()
+  }
+
   return (
-    <section>
+    <section className="overflow-y-scroll pe-5">
       <div
         id="asmrPlaylistInner"
         className="p-7 flex flex-col justify-between"
       ></div>
-      <Table aria-label="ASMR table">
-        <TableHeader>
-          <TableColumn>Nombre</TableColumn>
-          <TableColumn></TableColumn>
-        </TableHeader>
-        <TableBody>
-          {items.map(item => (
-            <TableRow key={item.title}>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>{item.excerpt}</TableCell>
-              <TableCell>
-                <img src={item.image} alt={item.title} />
-              </TableCell>
-              <TableCell>{item.queHice}</TableCell>
-              <TableCell>{item.queAprendi}</TableCell>
-            </TableRow>
+      <div className="py-10">
+        <article className="flex justify-between px-3 py-3">
+          <strong>Titulo</strong>
+          <div className="flex items-center gap-28">
+            <strong>Hisoria</strong>
+            <strong>Reproducir</strong>
+          </div>
+        </article>
+        <div className="flex flex-col gap-3">
+          {asmrPlaylist.map(item => (
+            <article
+              key={item.id}
+              className="flex justify-between items-center bg-gray py-2 px-7 rounded-full"
+            >
+              <h3 className="flex-1">
+                <span>{item.title.rendered} </span>-
+                <strong> {item.excerpt.rendered}</strong>
+              </h3>
+              <div className="flex-shrink flex items-center gap-24">
+                <Button
+                  key={item.id}
+                  color="primary"
+                  variant="flat"
+                  onPress={() => handleOpen(item)}
+                >
+                  Leer Historia
+                </Button>
+                <Button color="primary" radius="full" isIconOnly>
+                  {isPlaying ? <Pause /> : <Play />}
+                </Button>
+              </div>
+              <ModalAsmr
+                onClose={onClose}
+                isOpen={isOpen}
+                queHiceContent={currentItem?.acf.contenido_que_hice}
+                queAprendiContent={currentItem?.acf.contenido_que_aprendi}
+              />
+            </article>
           ))}
-        </TableBody>
-      </Table>
+        </div>
+      </div>
     </section>
   )
 }

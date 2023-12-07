@@ -11,11 +11,9 @@ export default function Asmr() {
         </p>
       </div>
       <div>
-        <NavLink to="/asmr">
-          <Button color="primary" radius="full" className="font-semibold">
-            Conocer
-          </Button>
-        </NavLink>
+        <Button color="primary" radius="full" className="font-semibold">
+          <NavLink to="/asmr">Escuchar</NavLink>
+        </Button>
       </div>
     </section>
   )

@@ -35,7 +35,9 @@ export default function MainHeader() {
   return (
     <header className="flex justify-between items-center">
       <h1>
-        <Logo />
+        <NavLink to="/" className="text-center">
+          <Logo />
+        </NavLink>
       </h1>
       <Tabs
         disabledKeys={user ? [] : ['/blog', '/comunidad']}
