@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
           return
         } else {
           setUser(session?.user.user_metadata)
-          // console.log('Datos del usuario: ', session?.user.user_metadata)
+          console.log('Datos del usuario: ', session?.user.user_metadata)
         }
       }
     )
@@ -54,7 +54,7 @@ export const AuthContextProvider = ({ children }) => {
 
     if (error) return console.error('Error al obtener los sonidos: ', error)
 
-    console.log('sounds: ', data)
+    // console.log('sounds: ', data)
     setSounds(data)
   }
 
