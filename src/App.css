@@ -114,11 +114,33 @@
   text-shadow: 1px 1px 10px #000;
 }
 
-/* .splide__list {
-  display: flex;
-  flex-wrap: nowrap;
-  width: 250%;
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-} */
+#blogBg {
+  width: 100%;
+  background-image: url('/blog-bg.avif');
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+#blogBg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(15, 15, 15);
+  background: linear-gradient(
+    0deg,
+    rgba(15, 15, 15, 1) 0%,
+    rgba(15, 15, 15, 0.9791771708683473) 17%,
+    rgba(15, 15, 15, 0.8755357142857143) 34%,
+    rgba(15, 15, 15, 0.7494572829131652) 52%,
+    rgba(15, 15, 15, 0.55057773109243695) 69%,
+    rgba(15, 15, 15, 0.44693627450980393) 85%,
+    rgba(15, 15, 15, 0.25085784313725494) 100%
+  );
+  z-index: 0;
+}

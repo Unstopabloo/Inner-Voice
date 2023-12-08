@@ -5,7 +5,7 @@ export default function CurrentSong() {
   const { currentSoundInfo } = usePlayerStore(state => state)
 
   return (
-    <div className="flex items-center gap-4 relative overflow-hidden max-w-xs w-[30%]">
+    <div className="flex items-center gap-4 relative overflow-hidden max-w-xs w-[25%]">
       <picture className="w-16 h-16 rounded-md shadow-lg overflow-hidden block">
         <img
           className="object-cover w-full h-full"
