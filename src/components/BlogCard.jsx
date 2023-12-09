@@ -6,21 +6,25 @@ import {
   Avatar,
   Button
 } from '@nextui-org/react'
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useBlogStore } from '../store/blogStore'
 
-export default function BlogCard({ author, username, title, followers }) {
-  const [isWatching, setIsWatching] = useState(false)
+export default function BlogCard({
+  author,
+  username,
+  title,
+  followers,
+  avatar_url,
+  id
+}) {
+  const { currentPostId } = useBlogStore(state => state)
+  const { setCurrentPostId, currentPostInfo } = useBlogStore(state => state)
+
   return (
-    <Card className="max-w-[340px]">
+    <Card className="min-w-[310px]">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
-          <Avatar
-            isBordered
-            radius="full"
-            size="md"
-            src="/avatars/avatar-1.png"
-          />
+          <Avatar isBordered radius="full" size="md" src={avatar_url} />
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
               {author ? author : 'Yogi Bear'}
@@ -32,17 +36,19 @@ export default function BlogCard({ author, username, title, followers }) {
         </div>
         <Button
           className={
-            isWatching
+            currentPostId === id
               ? 'bg-transparent text-foreground border-default-200'
               : ''
           }
           color="primary"
           radius="full"
           size="sm"
-          variant={isWatching ? 'bordered' : 'solid'}
-          onPress={() => setIsWatching(!isWatching)}
+          variant={currentPostId === id ? 'bordered' : 'solid'}
+          onClick={() => setCurrentPostId(id)}
+          onMouseEnter={() => console.log(currentPostId)}
+          onMouseOut={() => console.log(currentPostInfo)}
         >
-          {isWatching ? 'Viendo' : 'Ver'}
+          {currentPostId === id ? 'Viendo' : 'Ver'}
         </Button>
       </CardHeader>
       <CardBody className="px-3 py-0 text-small text-default-400">
@@ -64,5 +70,7 @@ BlogCard.propTypes = {
   author: PropTypes.string,
   username: PropTypes.string,
   title: PropTypes.string,
-  followers: PropTypes.string
+  followers: PropTypes.string,
+  avatar_url: PropTypes.string,
+  id: PropTypes.string
 }
