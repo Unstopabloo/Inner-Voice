@@ -34,9 +34,13 @@ export default function PlayerControls() {
   }, [currentSoundAudio])
 
   useEffect(() => {
-    audioRef.current.addEventListener('timeupdate', handleTimeUpdate)
-    return () => {
-      audioRef.current.removeEventListener('timeupdate', handleTimeUpdate)
+    if (audioRef.current) {
+      audioRef.current.addEventListener('timeupdate', handleTimeUpdate)
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('timeupdate', handleTimeUpdate)
+        }
+      }
     }
   })
 

@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../server/supabaseClient'
 import { PropTypes } from 'prop-types'
+import { useBlogStore } from '../store/blogStore'
 
 const AuthContext = createContext()
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([])
+  const [posts, setPosts] = useState([])
   const [sounds, setSounds] = useState([])
+  const { setCurrentPostInfo } = useBlogStore(state => state)
 
   async function signInWithGoogle() {
     try {
@@ -40,7 +43,7 @@ export const AuthContextProvider = ({ children }) => {
           return
         } else {
           setUser(session?.user.user_metadata)
-          console.log('Datos del usuario: ', session?.user.user_metadata)
+          // console.log('Datos del usuario: ', session?.user.user_metadata)
         }
       }
     )
@@ -58,12 +61,47 @@ export const AuthContextProvider = ({ children }) => {
     setSounds(data)
   }
 
+  const getPosts = async () => {
+    const { data: blog_posts, error } = await supabase.from('blog_posts')
+      .select(`
+        id,
+        title, 
+        content, 
+        created_at, 
+        profiles (username, avatar_url)
+      `)
+    if (error) console.log('Error al obtener los posts ', error)
+    setPosts(blog_posts)
+    console.log('Posts: ', blog_posts)
+  }
+
+  const getPost = async id => {
+    const { data: blog_post, error } = await supabase
+      .from('blog_posts')
+      .select(
+        `
+        id,
+        title, 
+        content, 
+        created_at, 
+        profiles (username, avatar_url)
+      `
+      )
+      .eq('id', id)
+    if (error) console.log('Error al obtener el post ', error)
+    setCurrentPostInfo(blog_post)
+    //console.log('Post: ', blog_post)
+  }
+
   return (
     <AuthContext.Provider
       value={{
         signInWithGoogle,
         signout,
         getSounds,
+        getPosts,
+        getPost,
+        posts,
         sounds,
         user
       }}

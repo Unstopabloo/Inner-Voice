@@ -7,6 +7,7 @@ import UserTemplate from '/user-template.avif'
 export default function Header() {
   const { signInWithGoogle, signout, user } = UserAuth()
   const firstName = user && user.name ? user.name.split(' ')[0] : 'Bienvenido!'
+
   return (
     <section className="header bg-container p-4">
       <header className="flex flex-col items-center justify-center h-full gap-6">

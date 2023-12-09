@@ -1,21 +1,33 @@
 import BlogCard from './BlogCard'
-// import { supabase } from '../server/supabaseClient'
-// import { useEffect } from 'react'
+import NewPost from './NewPost'
+import { useEffect } from 'react'
+import { UserAuth } from '../context/AuthContext'
 
 export default function Posts() {
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     const { data, error } = await supabase.from('blog_posts').select('*')
-  //     if (error) console.log(error)
-  //     console.log(data)
-  //   }
-  //   getPosts()
-  // }, [])
+  const { posts, getPosts } = UserAuth()
+  useEffect(() => {
+    getPosts()
+  }, [])
 
   return (
     <section className="flex flex-col gap-5">
-      <h2 className="text-xl font-bold">Posts destacados</h2>
-      <BlogCard />
+      <header className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Posts destacados</h2>
+        <NewPost />
+      </header>
+      <div className="flex flex-wrap gap-3">
+        {posts?.map(post => (
+          <BlogCard
+            key={post.id}
+            id={post.id}
+            author={post.profiles.username}
+            username={post.profiles.username.split(' ')[0]}
+            title={post.title}
+            followers={post.profiles.followers}
+            avatar_url={post.profiles.avatar_url}
+          />
+        ))}
+      </div>
     </section>
   )
 }
