@@ -16,8 +16,8 @@ export default function PlayerControls() {
     duration,
     setDuration
   } = usePlayerStore(state => state)
-  const [seconds, setSeconds] = useState()
-  const [minutes, setMinutes] = useState()
+  const [seconds, setSeconds] = useState(0)
+  const [minutes, setMinutes] = useState(0)
   const audioRef = useRef()
 
   useEffect(() => {
@@ -81,11 +81,15 @@ export default function PlayerControls() {
             aria-label="progress"
             size="sm"
             color="primary"
-            maxValue={audioRef?.current?.duration}
+            maxValue={
+              typeof audioRef?.current?.duration === 'number'
+                ? audioRef.current.duration
+                : 0
+            }
             defaultValue={0}
             minValue={0}
             className="w-full"
-            value={currentTime}
+            value={typeof currentTime === 'number' ? currentTime : 0}
           />
           <small>{`${Math.floor(duration / 60) || 0}:${
             Math.floor(duration % 60) || 0
@@ -97,7 +101,7 @@ export default function PlayerControls() {
         size="sm"
         color="primary"
         className="mx-w-md w-[120px]"
-        defaultValue={60}
+        defaultValue={30}
         onChange={newVolume => {
           audioRef.current.volume = newVolume / 100
           setVolume(newVolume)
