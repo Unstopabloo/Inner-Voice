@@ -62,17 +62,22 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   const getPosts = async () => {
-    const { data: blog_posts, error } = await supabase.from('blog_posts')
-      .select(`
+    const { data: blog_posts, error } = await supabase
+      .from('blog_posts')
+      .select(
+        `
         id,
         title, 
         content, 
         created_at, 
         profiles (username, avatar_url)
-      `)
+      `
+      )
+      .order('created_at', { ascending: false })
+      .limit(10)
     if (error) console.log('Error al obtener los posts ', error)
     setPosts(blog_posts)
-    console.log('Posts: ', blog_posts)
+    //console.log('Posts: ', blog_posts)
   }
 
   const getPost = async id => {
@@ -93,6 +98,31 @@ export const AuthContextProvider = ({ children }) => {
     //console.log('Post: ', blog_post)
   }
 
+  const newPost = async (title, content) => {
+    try {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser()
+      if (user) {
+        const user_id = user.id
+        // console.log('Id del usuario actual: ', user_id)
+        const { data, error } = await supabase.from('blog_posts').insert([
+          {
+            user_id,
+            title,
+            content
+          }
+        ])
+        if (error) console.log('Error al crear el post: ', error)
+        console.log('Post creado: ', data)
+      } else {
+        console.log('No hay ninguna sesión activa')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -101,6 +131,7 @@ export const AuthContextProvider = ({ children }) => {
         getSounds,
         getPosts,
         getPost,
+        newPost,
         posts,
         sounds,
         user

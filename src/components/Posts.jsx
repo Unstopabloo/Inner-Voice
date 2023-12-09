@@ -10,12 +10,12 @@ export default function Posts() {
   }, [])
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-7">
       <header className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Posts destacados</h2>
         <NewPost />
       </header>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap  gap-2">
         {posts?.map(post => (
           <BlogCard
             key={post.id}
