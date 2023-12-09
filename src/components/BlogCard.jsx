@@ -18,10 +18,10 @@ export default function BlogCard({
   id
 }) {
   const { currentPostId } = useBlogStore(state => state)
-  const { setCurrentPostId, currentPostInfo } = useBlogStore(state => state)
+  const { setCurrentPostId } = useBlogStore(state => state)
 
   return (
-    <Card className="min-w-[310px]">
+    <Card className="min-w-[295px] max-w-[350px] md:w-1/6">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar isBordered radius="full" size="md" src={avatar_url} />
@@ -45,8 +45,6 @@ export default function BlogCard({
           size="sm"
           variant={currentPostId === id ? 'bordered' : 'solid'}
           onClick={() => setCurrentPostId(id)}
-          onMouseEnter={() => console.log(currentPostId)}
-          onMouseOut={() => console.log(currentPostInfo)}
         >
           {currentPostId === id ? 'Viendo' : 'Ver'}
         </Button>

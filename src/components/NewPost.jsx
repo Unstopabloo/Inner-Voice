@@ -1,3 +1,6 @@
+import { Add } from './Icons'
+import { useState } from 'react'
+import { UserAuth } from '../context/AuthContext'
 import {
   Modal,
   ModalContent,
@@ -5,62 +8,75 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Textarea,
   useDisclosure,
-  Checkbox,
-  Input,
-  Link
+  Input
 } from '@nextui-org/react'
 
 export default function NewPost() {
+  const { newPost } = UserAuth()
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        Open Modal
+      <Button
+        size="sm"
+        radius="full"
+        onPress={onOpen}
+        color="primary"
+        endContent={<Add />}
+      >
+        Nuevo
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+      <Modal
+        className="bg-gray"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="top-center"
+      >
         <ModalContent>
           {onClose => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Nuevo Post
+              </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
-                  // endContent={
-                  //   <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  // }
-                  label="Email"
-                  placeholder="Enter your email"
+                  label="Titulo del post"
+                  placeholder="Ej: Yoga en areas verdes"
                   variant="bordered"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                 />
-                <Input
-                  // endContent={
-                  //   <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  // }
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
+                <Textarea
+                  label="Contenido"
+                  placeholder="Ej: El yoga es una disciplina física y mental que se originó en la India. La palabra se asocia con prácticas de meditación en el hinduismo, el budismo y el jainismo."
                   variant="bordered"
+                  value={content}
+                  onChange={e => setContent(e.target.value)}
                 />
-                <div className="flex py-2 px-1 justify-between">
-                  <Checkbox
-                    classNames={{
-                      label: 'text-small'
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
-                </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
+                <Button
+                  radius="full"
+                  size="sm"
+                  color="danger"
+                  variant="flat"
+                  onPress={onClose}
+                >
+                  Cancelar
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Sign in
+                <Button
+                  size="sm"
+                  radius="full"
+                  color="primary"
+                  onClick={() => newPost(title, content)}
+                  onPress={onClose}
+                >
+                  Enviar
                 </Button>
               </ModalFooter>
             </>
