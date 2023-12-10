@@ -4,7 +4,7 @@ import { UserAuth } from '../../context/AuthContext'
 import { useRef, useEffect } from 'react'
 
 export default function ChatLog() {
-  const { chatLog } = useAssistantStore()
+  const { chatLog, isLoading } = useAssistantStore()
   const { user } = UserAuth()
   const contentRef = useRef()
 
@@ -16,6 +16,7 @@ export default function ChatLog() {
   useEffect(() => {
     const element = contentRef.current
     element.scrollTop = element.scrollHeight
+    console.log(isLoading)
   }, [chatLog])
 
   return (
@@ -40,11 +41,11 @@ export default function ChatLog() {
                 className="w-7 h-7"
               />
             </div>
-            {message.user === 'User' ? (
-              <p className="text-sm">{message.message}</p>
-            ) : (
-              <p className="text-sm text-fore">{message.message}</p>
-            )}
+            <p
+              className={`${message.user === 'Assistant' ? 'text-fore' : null}`}
+            >
+              {message.message}
+            </p>
           </div>
         ))}
       </div>
