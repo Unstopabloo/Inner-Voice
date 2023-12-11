@@ -4,6 +4,7 @@ import Header from './layout/Header.jsx'
 import Assistant from './layout/Assistant.jsx'
 import MainContent from './layout/MainContent.jsx'
 import Player from './layout/Player.jsx'
+import People from './layout/People.jsx'
 import orbRight from '/orb-right.png'
 import { AuthContextProvider } from './context/AuthContext.jsx'
 
@@ -21,7 +22,7 @@ export default function App() {
         <Router>
           <MainContent />
         </Router>
-        <section className="cositas bg-container">cositas</section>
+        <People />
         <Player />
       </div>
     </AuthContextProvider>

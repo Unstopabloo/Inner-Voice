@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import MainHeader from '../components/MainHeader'
 import BlogPage from '../pages/BlogPage'
 import AudioPage from '../pages/AudioPage'
-import CommunityPage from '../pages/CommunityPage'
+import PeoplePage from '../pages/PeoplePage'
 import AsmrPage from '../pages/AsmrPage'
 
 export default function MainContent() {
@@ -13,7 +13,7 @@ export default function MainContent() {
         <Route path="/" element={<AudioPage />} />
         <Route path="/asmr" element={<AsmrPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/comunidad" element={<CommunityPage />} />
+        <Route path="/comunidad" element={<PeoplePage />} />
       </Routes>
     </main>
   )

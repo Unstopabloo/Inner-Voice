@@ -58,7 +58,7 @@ export default function MainHeader() {
         </Tab>
         <Tab id="/comunidad" key="/comunidad">
           <MyNavLink to="/comunidad" className="text-center" disabled={!user}>
-            Comunidad
+            Personas
           </MyNavLink>
         </Tab>
       </Tabs>
