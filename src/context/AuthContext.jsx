@@ -8,6 +8,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([])
   const [posts, setPosts] = useState([])
   const [sounds, setSounds] = useState([])
+  const [people, setPeople] = useState([])
   const { setCurrentPostInfo } = useBlogStore(state => state)
 
   async function signInWithGoogle() {
@@ -123,6 +124,15 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+  const getPeople = async () => {
+    const { data: profiles, error } = await supabase
+      .from('profiles')
+      .select('*')
+    if (error) console.log('Error al obtener los perfiles ', error)
+    // console.log('Perfiles: ', profiles)
+    setPeople(profiles)
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -132,6 +142,8 @@ export const AuthContextProvider = ({ children }) => {
         getPosts,
         getPost,
         newPost,
+        getPeople,
+        people,
         posts,
         sounds,
         user
