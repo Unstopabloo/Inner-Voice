@@ -6,9 +6,13 @@ import { useBlogStore } from '../store/blogStore'
 const AuthContext = createContext()
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([])
+  const [userProfile, setUserProfile] = useState([])
   const [posts, setPosts] = useState([])
   const [sounds, setSounds] = useState([])
   const [people, setPeople] = useState([])
+  const [events, setEvents] = useState([])
+  const [event, setEvent] = useState([])
+  const [eventUsers, setEventUsers] = useState([])
   const { setCurrentPostInfo } = useBlogStore(state => state)
 
   async function signInWithGoogle() {
@@ -44,7 +48,8 @@ export const AuthContextProvider = ({ children }) => {
           return
         } else {
           setUser(session?.user.user_metadata)
-          // console.log('Datos del usuario: ', session?.user.user_metadata)
+          setUserProfile(session?.user)
+          //console.log('Datos del usuario: ', session?.user.user_metadata)
         }
       }
     )
@@ -133,6 +138,61 @@ export const AuthContextProvider = ({ children }) => {
     setPeople(profiles)
   }
 
+  const getEvents = async () => {
+    let { data: events, error } = await supabase
+      .from('events')
+      .select(
+        `id, name, description, assistants, created_at, creator_id, profiles (id, username, avatar_url)`
+      )
+      .order('created_at', { ascending: false })
+
+    if (error) console.log('Error al obtener los eventos ', error)
+    // console.log('Eventos: ', events)
+
+    setEvents(events)
+  }
+
+  const getEvent = async id => {
+    const { data: event, error } = await supabase
+      .from('events')
+      .select(
+        `id, name, description, assistants, created_at, creator_id, profiles (id, username, avatar_url)`
+      )
+      .eq('id', id)
+
+    if (error) console.log('Error al obtener el evento ', error)
+    console.log('Evento: ', event)
+
+    setEvent(event)
+  }
+
+  const getEventUsers = async id => {
+    const { data: users, error } = await supabase
+      .from('event_assistant')
+      .select(
+        `
+            user_id (
+              id,
+              username,
+              avatar_url
+            )
+          `
+      )
+      .eq('event_id', id)
+
+    if (error) console.log('Error al obtener los usuarios del evento ', error)
+    console.log('Usuarios: ', users)
+    setEventUsers(users)
+  }
+
+  const newAssistant = async event_id => {
+    const { error } = await supabase
+      .from('event_assistant')
+      .insert([{ event_id, user_id: userProfile.id }])
+      .select()
+    if (error) console.log('Error al agregar el usuario al evento ', error)
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -143,10 +203,17 @@ export const AuthContextProvider = ({ children }) => {
         getPost,
         newPost,
         getPeople,
+        getEvents,
+        getEvent,
+        getEventUsers,
+        newAssistant,
+        eventUsers,
         people,
         posts,
         sounds,
-        user
+        user,
+        events,
+        event
       }}
     >
       {children}
