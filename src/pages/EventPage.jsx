@@ -1,74 +1,66 @@
-import { useEffect } from 'react'
+import EventPageHeader from '../components/EventPageHeader'
+import { Input, Button, Avatar } from '@nextui-org/react'
+import { Send } from '../components/Icons'
+import { useState, useEffect } from 'react'
 import { UserAuth } from '../context/AuthContext'
-import { useEventStore } from '../store/eventStore'
-import { Avatar, AvatarGroup, Button, Tooltip } from '@nextui-org/react'
 
 export default function EventPage() {
-  const { currentEventId } = useEventStore()
-  const { getEvent, getEventUsers, event, eventUsers, newAssistant } =
-    UserAuth()
+  const [message, setMessage] = useState('')
+  const { postMessage, fetchMessages, messages } = UserAuth()
+  const reversedMessages = messages.reverse()
 
   useEffect(() => {
-    getEvent(currentEventId)
-    getEventUsers(currentEventId)
+    fetchMessages()
   }, [])
 
-  const handleAssist = () => {
-    console.log('Asistire')
-    newAssistant(currentEventId)
+  const handleSubmit = async e => {
+    e.preventDefault()
+    await postMessage(message)
+    setMessage('')
   }
 
   return (
-    <section className="main-content-elements">
-      {event.map(event => {
-        return (
-          <div
-            key={event.id}
-            className="flex flex-col items-start border-b-1 border-grayLight pb-10 p-3 gap-8"
-          >
-            <header className="flex flex-col gap-4">
-              <h2 className="text-2xl font-bold">{event.name}</h2>
-              <p className="text-md w-2/3 text-fore">{event.description}</p>
-            </header>
-            <div className="flex justify-between items-center w-full">
-              <div>
-                <AvatarGroup isBordered max={3}>
-                  {eventUsers.map(user => {
-                    return (
-                      <Tooltip
-                        key={user.user_id.id}
-                        content={user.user_id.username.split(' ')[0]}
-                        classNames={{
-                          base: [
-                            // arrow color
-                            'before:bg-dark-400 dark:before:bg-dark'
-                          ],
-                          content: [
-                            'py-2 px-4 shadow-xl',
-                            'text-black text-[12px] bg-gray'
-                          ]
-                        }}
-                      >
-                        <Avatar size="sm" src={user.user_id.avatar_url} />
-                      </Tooltip>
-                    )
-                  })}
-                </AvatarGroup>
+    <section className="main-content-elements flex flex-col gap-5">
+      <EventPageHeader />
+      <ul className="overflow-y-auto pe-5">
+        {reversedMessages.map((message, index) => {
+          return (
+            <li
+              className={`p-2 my-3 flex items-center gap-3 ${
+                index % 2 === 0 ? 'bg-gray' : 'bg-[#252525]'
+              } rounded-xl`}
+              key={index}
+            >
+              <Avatar src={message.user.avatar_url} />
+              <div className="flex flex-col gap-1 flex-1">
+                <div className="flex justify-between w-full">
+                  <strong className="text-xs">{message.user.username}</strong>
+                  <span className="text-xs text-[#B4B4B8]">
+                    {new Date(message.created_at).toLocaleTimeString()}
+                  </span>
+                </div>
+                <p className="text-[#B4B4B8]">{message.content}</p>
               </div>
-              <div>
-                <Button
-                  className="font-semibold"
-                  variant="solid"
-                  color="primary"
-                  onClick={handleAssist}
-                >
-                  Asistire
-                </Button>
-              </div>
-            </div>
-          </div>
-        )
-      })}
+            </li>
+          )
+        })}
+      </ul>
+      <div className="h-20">
+        <form onSubmit={handleSubmit}>
+          <Input
+            onChange={e => setMessage(e.target.value)}
+            value={message}
+            type="text"
+            label="Ingresa tu mensaje"
+            placeholder="Hola a todos!"
+            endContent={
+              <Button isIconOnly variant="light" role="submit">
+                <Send color="#0070F0" />
+              </Button>
+            }
+          />
+        </form>
+      </div>
     </section>
   )
 }
