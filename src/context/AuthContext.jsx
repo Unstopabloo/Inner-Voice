@@ -121,7 +121,7 @@ export const AuthContextProvider = ({ children }) => {
           }
         ])
         if (error) console.log('Error al crear el post: ', error)
-        console.log('Post creado: ', data)
+        // console.log('Post creado: ', data)
       } else {
         console.log('No hay ninguna sesión activa')
       }
@@ -198,7 +198,7 @@ export const AuthContextProvider = ({ children }) => {
       .insert([{ name, description, creator_id: userProfile.id }])
       .select()
     if (error) console.log('Error al crear el evento ', error)
-    console.log('Evento creado: ', data)
+    // console.log('Evento creado: ', data)
   }
 
   const handleNewMessage = async payload => {

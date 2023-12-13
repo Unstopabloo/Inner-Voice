@@ -14,7 +14,7 @@ export default function EventPageHeader() {
   }, [])
 
   const handleAssist = () => {
-    console.log('Asistire')
+    // console.log('Asistire')
     newAssistant(currentEventId)
   }
   return (
