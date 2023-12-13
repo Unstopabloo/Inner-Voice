@@ -4,6 +4,7 @@ import BlogPage from '../pages/BlogPage'
 import AudioPage from '../pages/AudioPage'
 import PeoplePage from '../pages/PeoplePage'
 import AsmrPage from '../pages/AsmrPage'
+import EventPage from '../pages/EventPage'
 
 export default function MainContent() {
   return (
@@ -14,6 +15,7 @@ export default function MainContent() {
         <Route path="/asmr" element={<AsmrPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/comunidad" element={<PeoplePage />} />
+        <Route path="/evento" element={<EventPage />} />
       </Routes>
     </main>
   )

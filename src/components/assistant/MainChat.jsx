@@ -4,8 +4,10 @@ import { useState } from 'react'
 import OptionList from './OptionList'
 import { useAssistantStore } from '../../store/assistantStore'
 import ChatLog from './ChatLog'
+import { UserAuth } from '../../context/AuthContext'
 
 export default function MainChat() {
+  const { user } = UserAuth()
   const [SVGcolor, setSVGcolor] = useState('#1E1E1E')
   const {
     question,
@@ -54,6 +56,13 @@ export default function MainChat() {
     setQuestion('')
   }
 
+  const disabling = () => {
+    if (user && !isLoading) return false
+    if (user && isLoading) return true
+    if (!user && isLoading) return true
+    if (!user && !isLoading) return true
+  }
+
   return (
     <>
       {firstMessage ? <ChatLog /> : <OptionList />}
@@ -63,7 +72,7 @@ export default function MainChat() {
         className="flex items-center justify-between gap-4"
       >
         <Input
-          disabled={isLoading ? true : false}
+          disabled={disabling()}
           size="sm"
           radius="full"
           type="text"
@@ -74,7 +83,7 @@ export default function MainChat() {
           onChange={e => setQuestion(e.target.value)}
         />
         <Button
-          disabled={isLoading ? true : false}
+          disabled={disabling()}
           isIconOnly
           onClick={handleSubmit}
           radius="full"

@@ -6,9 +6,14 @@ import { useBlogStore } from '../store/blogStore'
 const AuthContext = createContext()
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([])
+  const [userProfile, setUserProfile] = useState([])
   const [posts, setPosts] = useState([])
   const [sounds, setSounds] = useState([])
   const [people, setPeople] = useState([])
+  const [events, setEvents] = useState([])
+  const [event, setEvent] = useState([])
+  const [messages, setMessages] = useState([])
+  const [eventUsers, setEventUsers] = useState([])
   const { setCurrentPostInfo } = useBlogStore(state => state)
 
   async function signInWithGoogle() {
@@ -44,7 +49,8 @@ export const AuthContextProvider = ({ children }) => {
           return
         } else {
           setUser(session?.user.user_metadata)
-          // console.log('Datos del usuario: ', session?.user.user_metadata)
+          setUserProfile(session?.user)
+          //console.log('Datos del usuario: ', session?.user.user_metadata)
         }
       }
     )
@@ -133,9 +139,119 @@ export const AuthContextProvider = ({ children }) => {
     setPeople(profiles)
   }
 
+  const getEvents = async () => {
+    let { data: events, error } = await supabase
+      .from('events')
+      .select(
+        `id, name, description, assistants, created_at, creator_id, profiles (id, username, avatar_url)`
+      )
+      .order('created_at', { ascending: false })
+
+    if (error) console.log('Error al obtener los eventos ', error)
+    // console.log('Eventos: ', events)
+
+    setEvents(events)
+  }
+
+  const getEvent = async id => {
+    const { data: event, error } = await supabase
+      .from('events')
+      .select(
+        `id, name, description, assistants, created_at, creator_id, profiles (id, username, avatar_url)`
+      )
+      .eq('id', id)
+
+    if (error) console.log('Error al obtener el evento ', error)
+
+    setEvent(event)
+  }
+
+  const getEventUsers = async id => {
+    const { data: users, error } = await supabase
+      .from('event_assistant')
+      .select(
+        `
+            user_id (
+              id,
+              username,
+              avatar_url
+            )
+          `
+      )
+      .eq('event_id', id)
+
+    if (error) console.log('Error al obtener los usuarios del evento ', error)
+    setEventUsers(users)
+  }
+
+  const newAssistant = async event_id => {
+    const { error } = await supabase
+      .from('event_assistant')
+      .insert([{ event_id, user_id: userProfile.id }])
+      .select()
+    if (error) console.log('Error al agregar el usuario al evento ', error)
+  }
+
+  const newEvent = async (name, description) => {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{ name, description, creator_id: userProfile.id }])
+      .select()
+    if (error) console.log('Error al crear el evento ', error)
+    console.log('Evento creado: ', data)
+  }
+
+  const handleNewMessage = async payload => {
+    const newMessage = payload.new
+
+    // Fetch the user data for the new message
+    const { data: userData, error: userError } = await supabase
+      .from('profiles')
+      .select('username, avatar_url')
+      .eq('id', newMessage.user_id)
+    if (userError) console.error('Error fetching user data: ', userError)
+
+    // Add the user data to the new message
+    newMessage.user = userData[0]
+
+    setMessages(prevMessages => [newMessage, ...prevMessages])
+    console.log('Nuevo mensaje: ', newMessage)
+  }
+
+  const channel = supabase
+    .channel('event-chat')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'messages' },
+      payload => {
+        // const newMessage = payload.new
+        // console.log('Change received!', newMessage)
+        handleNewMessage(payload)
+      }
+    )
+    .subscribe()
+
+  const postMessage = async content => {
+    const { data, error } = await supabase
+      .from('messages')
+      .insert([{ content, user_id: userProfile.id }])
+      .select('id, content, created_at, user_id (username, avatar_url)')
+    if (error) console.log('Error al agregar el mensaje ', error)
+    //console.log('Mensaje enviado: ', data)
+  }
+
+  const fetchMessages = async () => {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('id, content, created_at, user_id (username, avatar_url)')
+    if (error) console.error('Error fetching messages: ', error)
+    //console.log('Mensajes: ', data)
+  }
+
   return (
     <AuthContext.Provider
       value={{
+        channel,
         signInWithGoogle,
         signout,
         getSounds,
@@ -143,10 +259,21 @@ export const AuthContextProvider = ({ children }) => {
         getPost,
         newPost,
         getPeople,
+        getEvents,
+        getEvent,
+        getEventUsers,
+        newAssistant,
+        postMessage,
+        fetchMessages,
+        newEvent,
+        messages,
+        eventUsers,
         people,
         posts,
         sounds,
-        user
+        user,
+        events,
+        event
       }}
     >
       {children}
