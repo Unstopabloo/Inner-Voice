@@ -24,7 +24,7 @@ export default function Events() {
   }, [])
 
   const handleNewEvent = () => {
-    console.log('Crear evento')
+    //console.log('Crear evento')
     newEvent(name, description)
   }
 
