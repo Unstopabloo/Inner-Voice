@@ -192,6 +192,15 @@ export const AuthContextProvider = ({ children }) => {
     if (error) console.log('Error al agregar el usuario al evento ', error)
   }
 
+  const newEvent = async (name, description) => {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{ name, description, creator_id: userProfile.id }])
+      .select()
+    if (error) console.log('Error al crear el evento ', error)
+    console.log('Evento creado: ', data)
+  }
+
   const handleNewMessage = async payload => {
     const newMessage = payload.new
 
@@ -228,7 +237,7 @@ export const AuthContextProvider = ({ children }) => {
       .insert([{ content, user_id: userProfile.id }])
       .select('id, content, created_at, user_id (username, avatar_url)')
     if (error) console.log('Error al agregar el mensaje ', error)
-    console.log('Mensaje enviado: ', data)
+    //console.log('Mensaje enviado: ', data)
   }
 
   const fetchMessages = async () => {
@@ -236,7 +245,7 @@ export const AuthContextProvider = ({ children }) => {
       .from('messages')
       .select('id, content, created_at, user_id (username, avatar_url)')
     if (error) console.error('Error fetching messages: ', error)
-    console.log('Mensajes: ', data)
+    //console.log('Mensajes: ', data)
   }
 
   return (
@@ -256,6 +265,7 @@ export const AuthContextProvider = ({ children }) => {
         newAssistant,
         postMessage,
         fetchMessages,
+        newEvent,
         messages,
         eventUsers,
         people,

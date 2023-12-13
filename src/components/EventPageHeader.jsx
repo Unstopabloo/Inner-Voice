@@ -29,12 +29,13 @@ export default function EventPageHeader() {
               <h2 className="text-md font-bold">{event.name}</h2>
               <p className="text-sm text-fore">{event.description}</p>
             </header>
-            <div className="flex flex-col w-[20%] items-end gap-5 w-full">
+            <div className="flex flex-col w-[20%] items-end gap-5">
               <div>
                 <Button
                   className="font-semibold"
                   variant="solid"
                   color="primary"
+                  size="sm"
                   onClick={handleAssist}
                 >
                   Asistire
